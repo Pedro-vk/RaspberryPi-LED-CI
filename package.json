@@ -1,0 +1,15 @@
+{
+  "name": "raspberry-led-ci",
+  "version": "0.1.0",
+  "description": "CI on Raspberry Pi with LEDs (gpio).",
+  "main": "index.js",
+  "dependencies": {
+    "rpi-gpio": "^0.7.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "sudo node index.js"
+  },
+  "author": "Pedro Gutiérrez",
+  "license": "MIT"
+}
