@@ -1,2 +1,2 @@
 # RaspberryPi-LED-CI
-CI on Raspberry Pi with LEDs (gpio).
+CI over Raspberry Pi with LEDs (gpio).
