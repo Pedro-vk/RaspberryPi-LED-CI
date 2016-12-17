@@ -1,7 +1,7 @@
 module.exports = class LedLayout {
   
-  constructor(gpio, layout, callback) {
-    this._testTime = 2000;
+  constructor(gpio, testTime, layout, callback) {
+    this._testTime = testTime / 2;
     this._gpio = gpio;
     this._layout = Object.assign({
       success: null,
@@ -28,6 +28,20 @@ module.exports = class LedLayout {
   }
 
   test() {
+    this._testStep1();
+  }
+  _testStep1() {
+    this.writeAll();
+    setTimeout(() => this.writeAll(false), this._testTime * 0.3);
+    setTimeout(() => this.writeAll(), this._testTime * 0.4);
+    setTimeout(() => this.writeAll(false), this._testTime * 0.7);
+    setTimeout(() => this.writeAll(), this._testTime * 0.8);
+    setTimeout(() => {
+      this.writeAll(false);
+      this._testStep2();
+    }, this._testTime);
+  }
+  _testStep2() {    
     this.writeSuccess();
     let successOn = false;
     let successInterval = setInterval(() => this.writeSuccess(successOn = !successOn), 200);
@@ -65,7 +79,12 @@ module.exports = class LedLayout {
       .filter((_, i) => ((i + 1) / this._layout.progress.length * 100) <= progress)
       .forEach(_ => this.write(_));
   }
-
+  writeAll(value = true) {
+    Object.values(this._layout)
+      .map(_ => Array.isArray(_) ? _ : [_])
+      .reduce((acc, _) => acc.concat(_), [])
+      .forEach(_ => this.write(_, value));
+  }
   write(pin = this._layout.warn, value = true) {
     this._gpio.write(pin, value, function(err) {
       if (err) {
